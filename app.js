@@ -11,7 +11,7 @@ var app = express()
 
 var spotifyApi = new SpotifyWebApi({
   clientId: '0c8ab2e8942c482ab5e2974861cd0776',
-  clientSecret: '890debe1424249aa9835b17fbf72585e',
+  clientSecret: '',
   redirectUri: 'http://localhost:8888/callback'
 })
 
