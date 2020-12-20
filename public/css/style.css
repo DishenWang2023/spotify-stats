@@ -155,26 +155,69 @@ nav {
 }
 
 .topArtists, .topTracks {
-  width: 40%;
-  margin: 0 auto;
-  margin-bottom: 20px;
+  width: 45%;
+  margin: 0 10px 20px 10px;
   padding: 10px 0px;
   background-color: #191414;
 }
 
-.rank {
+.rankList {
   padding: 20px;
   list-style: none;
 }
 
-.rank img {
+.rankList img {
   width: 60px;
   height: 60px;
   border: 5px solid #1DB954;
 }
 
-.rank p {
+.rankList p {
   font-weight: 600;
+}
+
+.playlistMenu h3 {
+  padding-bottom: 10px;
+}
+
+.playlistMenu ul {
+  margin: 0px auto;
+  list-style: none;
+  display: flex;
+  width: 90%;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.playlistMenu li {
+  width: 20%;
+  height: 60px;
+}
+
+.playlistMenu button {
+  width: 98%;
+  height: 96%;
+  overflow: hidden;
+  border: none;
+  color: #FFFFFF;
+  background-color: #222;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.playlistMenu button:hover {
+  background-color: #1DB954;
+  color: #191414;
+}
+
+.playlistMenu button:focus {
+  background-color: #1DB954;
+  color: #FFFFFF;
+}
+
+.lolipopChart {
+  margin: 0 auto;
+  margin-top: 30px;
 }
 
 nav ul {
@@ -225,9 +268,18 @@ nav ul li a:hover {
   display: none;
 }
 
-#loggedin ul {
+#ranks ul {
   margin: auto;
   width: 40%;
+}
+
+#ranks {
+  display: flex;
+  justify-content: center;
+}
+
+#graphs {
+  margin-top: 20px;
 }
 
 @media only screen and (min-width: 1000px) {

@@ -11,7 +11,7 @@ var app = express()
 
 var spotifyApi = new SpotifyWebApi({
   clientId: '0c8ab2e8942c482ab5e2974861cd0776',
-  clientSecret: '',
+  clientSecret: '890debe1424249aa9835b17fbf72585e',
   redirectUri: 'http://localhost:8888/callback'
 })
 
@@ -86,7 +86,9 @@ app.get('/userInfo', async (req, res) => {
 })
 
 app.get('/playlists', async (req, res) => {
-  var userPlaylists = await spotifyApi.getUserPlaylists()
+  var userPlaylists = await spotifyApi.getUserPlaylists({
+    limit: 40
+  })
   res.status(200).send(userPlaylists.body)
 })
 
@@ -102,6 +104,11 @@ app.get('/topTracks', async (req, res) => {
     limit: 5
   })
   res.status(200).send(userTopTracks.body)
+})
+
+app.get('/playlistTracks', async (req, res) => {
+  var userPlaylist = await spotifyApi.getPlaylistTracks(req.query.id)
+  res.status(200).send(userPlaylist.body)
 })
 
 console.log('Listening on 8888')
