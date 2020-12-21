@@ -87,7 +87,7 @@ app.get('/userInfo', async (req, res) => {
 
 app.get('/playlists', async (req, res) => {
   var userPlaylists = await spotifyApi.getUserPlaylists({
-    limit: 40
+    limit: 50
   })
   res.status(200).send(userPlaylists.body)
 })

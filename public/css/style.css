@@ -127,8 +127,8 @@ p {
 }
 
 h3 {
-  margin: 10px;
   font-size: 20px;
+  margin: 10px;
 }
 
 nav {
@@ -167,8 +167,8 @@ nav {
 }
 
 .rankList img {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border: 5px solid #1DB954;
 }
 
@@ -177,6 +177,7 @@ nav {
 }
 
 .playlistMenu h3 {
+  font-size: 30px;
   padding-bottom: 10px;
 }
 
@@ -215,9 +216,17 @@ nav {
   color: #FFFFFF;
 }
 
-.lolipopChart {
-  margin: 0 auto;
+#playlistTitle {
   margin-top: 30px;
+}
+
+#lolipopChart {
+  margin: 0 auto;
+}
+
+#treemap {
+  margin: 0 auto;
+  margin-bottom: 100px;
 }
 
 nav ul {
@@ -280,6 +289,22 @@ nav ul li a:hover {
 
 #graphs {
   margin-top: 20px;
+}
+
+#playlistTitle {
+  margin: 40px auto 20px;
+  margin-bottom: 30px;
+  width: 900px;
+}
+
+#playlistTitle h3 {
+  margin: 0;
+  font-size: 28px;
+  font-style: italic;
+}
+
+#playlistTitle p {
+  padding: 0;
 }
 
 @media only screen and (min-width: 1000px) {
