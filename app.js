@@ -13,7 +13,7 @@ var app = express()
 var spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  redirectUri: process.env.REDIRECT_URI
+  redirectUri: 'http://localhost:8888/callback'
 })
 
 app.use(express.static(__dirname + '/public'))
