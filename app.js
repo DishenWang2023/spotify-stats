@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const SpotifyWebApi = require('spotify-web-api-node')
 
@@ -10,9 +11,9 @@ const scopes = [
 var app = express()
 
 var spotifyApi = new SpotifyWebApi({
-  clientId: '0c8ab2e8942c482ab5e2974861cd0776',
-  clientSecret: '890debe1424249aa9835b17fbf72585e',
-  redirectUri: 'http://localhost:8888/callback'
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: process.env.REDIRECT_URI
 })
 
 app.use(express.static(__dirname + '/public'))
