@@ -162,18 +162,17 @@ nav {
 }
 
 .rankList {
-  padding: 20px;
+  margin: 40px auto;
+  width: 180px;
+  height: 140px;
   list-style: none;
+  font-weight: 600;
 }
 
 .rankList img {
   width: 70px;
   height: 70px;
   border: 5px solid #1DB954;
-}
-
-.rankList p {
-  font-weight: 600;
 }
 
 .playlistMenu h3 {
@@ -232,9 +231,6 @@ nav {
 nav ul {
   margin-left: 80px;
   display: flex;
-}
-
-nav ul li {
   list-style: none;
 }
 
@@ -249,12 +245,25 @@ nav ul li a:hover {
   color: #1DB954;
 }
 
+#login, #loggedin {
+  display: none;
+}
+
 #username {
   position: absolute;
   right: 0;
   margin-right: 25px;
   font-size: 20px;
   font-weight: 700;
+}
+
+#login {
+  padding-bottom: 100%;
+}
+
+#login p {
+  margin: 0 auto;
+  width: 80%;
 }
 
 #login a {
@@ -271,10 +280,6 @@ nav ul li a:hover {
 
 #login a:hover {
   border-style: dashed;
-}
-
-#login, #loggedin {
-  display: none;
 }
 
 #ranks ul {

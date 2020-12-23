@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const SpotifyWebApi = require('spotify-web-api-node')
 
+//
 const scopes = [
   'user-read-private',
   'user-top-read',
@@ -81,11 +82,13 @@ app.get('/verifyToken', async (req, res) => {
   }
 })
 
+// get user's profile information
 app.get('/userInfo', async (req, res) => {
   var userInfo = await spotifyApi.getMe()
   res.status(200).send(userInfo.body)
 })
 
+// get user's list of playlists
 app.get('/playlists', async (req, res) => {
   var userPlaylists = await spotifyApi.getUserPlaylists({
     limit: 50
@@ -93,6 +96,7 @@ app.get('/playlists', async (req, res) => {
   res.status(200).send(userPlaylists.body)
 })
 
+// get user's top artists
 app.get('/topArtists', async (req, res) => {
   var userTopArtists = await spotifyApi.getMyTopArtists({
     limit: 5
@@ -100,6 +104,7 @@ app.get('/topArtists', async (req, res) => {
   res.status(200).send(userTopArtists.body)
 })
 
+// get user's top tracks
 app.get('/topTracks', async (req, res) => {
   var userTopTracks = await spotifyApi.getMyTopTracks({
     limit: 5
@@ -107,9 +112,22 @@ app.get('/topTracks', async (req, res) => {
   res.status(200).send(userTopTracks.body)
 })
 
+// get playlist's tracks with full information
 app.get('/playlistTracks', async (req, res) => {
-  var userPlaylist = await spotifyApi.getPlaylistTracks(req.query.id)
-  res.status(200).send(userPlaylist.body)
+  // multiplied by lim gives maximum requested tracks allowed
+  const maxTracks = 3
+  const lim = 100
+  var userTracks = await spotifyApi.getPlaylistTracks(req.query.id, {
+    limit: lim
+  })
+  userTracks.body.limit = maxTracks * lim
+  for (var i = 1; i <= Math.min(Math.floor(userTracks.body.total / lim), maxTracks - 1); i++) {
+    var newTracks = await spotifyApi.getPlaylistTracks(req.query.id, {
+      offset: i * lim
+    })
+    userTracks.body.items = userTracks.body.items.concat(newTracks.body.items)
+  }
+  res.status(200).send(userTracks.body)
 })
 
 console.log('Listening on 8888')

@@ -66,6 +66,7 @@ const checkToken = async () => {
     .catch(err => console.error('Error getting access token: ', err))
 }
 
+// render list of top rankings
 function topRankings(dataSet, name) {
   d3.select('#ranks')
     .append('div')
@@ -82,6 +83,7 @@ function topRankings(dataSet, name) {
   return lis
 }
 
+// render playlist's menu
 function playlistMenu(dataSet) {
   var ps = ''
   if (dataSet.total >= dataSet.limit) {
@@ -131,6 +133,7 @@ function playlistTitle(i, tracks) {
   }
 }
 
+// render bar chart
 function popularityBar(tracks) {
   d3.select('#barChart').remove()
   const margin = {
@@ -144,7 +147,7 @@ function popularityBar(tracks) {
   d3.select('#graphs')
     .append('div')
     .attr('id', 'barChart')
-    .append('h3').text('Track popularity')
+    .append('h3').text('Global Song Popularity')
   // svg object
   const svg = d3.select('#barChart')
     .append('svg')
@@ -163,7 +166,7 @@ function popularityBar(tracks) {
     .selectAll('text')
     .text((t, i) => {
       if (tracks.length > 50) {
-        return '.'
+        return ''
       } else if (t.length > 20) {
         return t.slice(0, 20) + '...'
       } else {
@@ -185,26 +188,32 @@ function popularityBar(tracks) {
     .append('rect')
     .attr('x', (d) => x(d.track.name))
     .attr('width', x.bandwidth())
-    .attr('fill', '#4fe383')
-    .on('mouseover', function() {
-      d3.select(this).attr('fill', '#ff9999')
+    .attr('fill', (d) => {
+      var pop = d.track.popularity
+      return ((pop == 0) ? '#1a1a1a' : '#4fe383')
     })
-    .on('mouseout', function() {
-      d3.select(this).attr('fill', '#4fe383')
-    })
+    .on('mouseover', mouseoverBar)
+    .on('mouseout', mouseoutBar)
     // no bar at beginning
-    .attr('height', (d) => height - y(0))
-    .attr('y', (d) => y(0))
+    .attr('height', height - y(0))
+    .attr('y', y(0))
     .append('title')
     .text((d) => d.track.name + ', ' + d.track.popularity)
   svg.selectAll('rect')
     .transition()
     .duration(800)
-    .attr('y', (d) => y(d.track.popularity))
-    .attr('height', (d) => height - y(d.track.popularity))
-    .delay((d, i) => (i * 80))
+    .attr('y', (d) => {
+      var pop = d.track.popularity
+      return ((pop == 0) ? y(100) : y(pop))
+    })
+    .attr('height', (d) => {
+      var pop = d.track.popularity
+      return ((pop == 0) ? (height - y(100)) : (height - y(pop)))
+    })
+    .delay((d, i) => (i * 60))
 }
 
+// render treemap
 function artistsTree(tracks) {
   d3.select('#treemap').remove()
   const margin = {
@@ -276,24 +285,8 @@ function artistsTree(tracks) {
         return 'rgb(' + (149 - d.data.value * 8) + ',' + (185 - d.data.value * 2) + ',' + (204 - d.data.value * 8) + ')'
       }
     })
-    .on('mouseover', function(d) {
-      d3.select(this).attr('fill', (d) => {
-        if (d.data.value >= 15) {
-          return 'rgb(' + 255 + ',' + 38 + ',' + 38 + ')'
-        } else {
-          return 'rgb(' + 255 + ',' + (188 - d.data.value * 8) + ',' + (188 - d.data.value * 8) + ')'
-        }
-      })
-    })
-    .on('mouseout', function(d) {
-      d3.select(this).attr('fill', (d) => {
-        if (d.data.value >= 15) {
-          return 'rgb(' + 29 + ',' + 185 + ',' + 84 + ')'
-        } else {
-          return 'rgb(' + (149 - d.data.value * 8) + ',' + (185 - d.data.value * 2) + ',' + (204 - d.data.value * 8) + ')'
-        }
-      })
-    })
+    .on('mouseover', mouseoverTree)
+    .on('mouseout', mouseoutTree)
     .append('title')
     .text((d) => {
       if (d.data.value == 1) {
@@ -323,6 +316,7 @@ function artistsTree(tracks) {
     .attr('fill', 'white')
 }
 
+// render lolipop chart
 function durationLolipop(tracks) {
   d3.select('#lolipopChart').remove()
   const margin = {
@@ -337,7 +331,7 @@ function durationLolipop(tracks) {
   d3.select('#graphs')
     .append('div')
     .attr('id', 'lolipopChart')
-    .append('h3').text('Track duration (sec)')
+    .append('h3').text('Song Duration (sec)')
   // svg object
   const svg = d3.select('#lolipopChart')
     .append('svg')
@@ -390,14 +384,56 @@ function durationLolipop(tracks) {
     .attr('r', '4')
     .attr('fill', '#1DB954')
     .attr('stroke', 'black')
-    .on('mouseover', function() {
-      d3.select(this).attr('fill', '#ff9999')
-    })
-    .on('mouseout', function() {
-      d3.select(this).attr('fill', '#1DB954')
-    })
+    .on('mouseover', mouseoverLolipop)
+    .on('mouseout', mouseoutLolipop)
     .append('title')
     .text((d) => d.track.name + ', ' + d.track.duration_ms / 1000 + ' sec')
+}
+
+function mouseoverBar(_, d, i) {
+  var pop = d.track.popularity
+  if (pop == 0) {
+    d3.select(this).attr('stroke', '#ff9999')
+  } else {
+    d3.select(this).attr('fill', '#ff9999')
+  }
+}
+
+function mouseoutBar(_, d, i) {
+  var pop = d.track.popularity
+  if (pop == 0) {
+    d3.select(this).attr('stroke', 'none')
+  } else {
+    d3.select(this).attr('fill', '#4fe383')
+  }
+}
+
+function mouseoverTree() {
+  d3.select(this).attr('fill', (d) => {
+    if (d.data.value >= 15) {
+      return 'rgb(' + 255 + ',' + 38 + ',' + 38 + ')'
+    } else {
+      return 'rgb(' + 255 + ',' + (188 - d.data.value * 8) + ',' + (188 - d.data.value * 8) + ')'
+    }
+  })
+}
+
+function mouseoutTree() {
+  d3.select(this).attr('fill', (d) => {
+    if (d.data.value >= 15) {
+      return 'rgb(' + 29 + ',' + 185 + ',' + 84 + ')'
+    } else {
+      return 'rgb(' + (149 - d.data.value * 8) + ',' + (185 - d.data.value * 2) + ',' + (204 - d.data.value * 8) + ')'
+    }
+  })
+}
+
+function mouseoverLolipop() {
+  d3.select(this).attr('fill', '#ff9999')
+}
+
+function mouseoutLolipop() {
+  d3.select(this).attr('fill', '#1DB954')
 }
 
 document.addEventListener('DOMContentLoaded', () => {
